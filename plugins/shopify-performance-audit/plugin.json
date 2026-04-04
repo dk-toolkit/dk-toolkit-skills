@@ -1,0 +1,27 @@
+{
+  "name": "shopify-performance-audit",
+  "displayName": "Shopify Performance Audit",
+  "version": "1.0.0",
+  "description": "Runs comprehensive performance audits on Shopify stores using PageSpeed Insights and Core Web Vitals.",
+  "author": {
+    "name": "DK Toolkit",
+    "organization": "DevX Labs",
+    "website": "https://www.devxlabs.ai/"
+  },
+  "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
+  "license": "MIT",
+  "category": "performance",
+  "tags": ["shopify", "performance", "pagespeed", "core-web-vitals", "audit", "report"],
+  "triggers": ["performance audit", "speed audit", "pagespeed report"],
+  "userInvocable": true,
+  "tools": ["Read", "Write", "Bash", "WebFetch", "WebSearch", "Glob", "Grep", "AskUserQuestion"],
+  "dependencies": {
+    "python": ["python-docx", "playwright"],
+    "mcp": []
+  },
+  "files": {
+    "skill": "SKILL.md",
+    "references": [],
+    "scripts": ["scripts/generate_report.py"]
+  }
+}

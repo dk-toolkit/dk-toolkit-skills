@@ -1,0 +1,27 @@
+{
+  "name": "skill-updater",
+  "displayName": "Skill Updater",
+  "version": "1.0.0",
+  "description": "Propagates accumulated learnings and improvements across all plugin skills automatically.",
+  "author": {
+    "name": "DK Toolkit",
+    "organization": "DevX Labs",
+    "website": "https://www.devxlabs.ai/"
+  },
+  "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
+  "license": "MIT",
+  "category": "utility",
+  "tags": ["utility", "automation", "learnings", "self-improvement"],
+  "triggers": ["update skills", "propagate learnings"],
+  "userInvocable": false,
+  "tools": ["Read", "Write", "Grep"],
+  "dependencies": {
+    "python": [],
+    "mcp": []
+  },
+  "files": {
+    "skill": "SKILL.md",
+    "references": [],
+    "scripts": []
+  }
+}

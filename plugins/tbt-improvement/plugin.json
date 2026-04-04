@@ -1,0 +1,27 @@
+{
+  "name": "tbt-improvement",
+  "displayName": "TBT Improvement",
+  "version": "1.0.0",
+  "description": "Diagnoses and fixes Total Blocking Time issues in Shopify themes to improve Core Web Vitals.",
+  "author": {
+    "name": "DK Toolkit",
+    "organization": "DevX Labs",
+    "website": "https://www.devxlabs.ai/"
+  },
+  "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
+  "license": "MIT",
+  "category": "performance",
+  "tags": ["shopify", "performance", "tbt", "total-blocking-time", "core-web-vitals"],
+  "triggers": ["improve tbt", "fix blocking time", "reduce total blocking time"],
+  "userInvocable": true,
+  "tools": ["Read", "Write", "Edit", "Bash", "WebFetch", "WebSearch", "Glob", "Grep", "AskUserQuestion"],
+  "dependencies": {
+    "python": [],
+    "mcp": []
+  },
+  "files": {
+    "skill": "SKILL.md",
+    "references": [],
+    "scripts": []
+  }
+}

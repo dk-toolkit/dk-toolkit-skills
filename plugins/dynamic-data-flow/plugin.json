@@ -1,0 +1,27 @@
+{
+  "name": "dynamic-data-flow",
+  "displayName": "Dynamic Data Flow",
+  "version": "1.0.0",
+  "description": "Replaces hardcoded Shopify template content with dynamic metafield-driven data using Liquid and GraphQL.",
+  "author": {
+    "name": "DK Toolkit",
+    "organization": "DevX Labs",
+    "website": "https://www.devxlabs.ai/"
+  },
+  "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
+  "license": "MIT",
+  "category": "shopify-content",
+  "tags": ["shopify", "metafields", "dynamic-content", "liquid", "graphql"],
+  "triggers": ["make this page dynamic", "add metafields", "replace hardcoded content", "dynamic shopify template", "metafield-driven", "make sections editable"],
+  "userInvocable": false,
+  "tools": ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "AskUserQuestion"],
+  "dependencies": {
+    "python": ["requests"],
+    "mcp": []
+  },
+  "files": {
+    "skill": "SKILL.md",
+    "references": ["references/metafield-types.md", "references/decision-rules.md", "references/liquid-patterns.md", "references/api-reference.md"],
+    "scripts": ["scripts/shopify_api.py"]
+  }
+}

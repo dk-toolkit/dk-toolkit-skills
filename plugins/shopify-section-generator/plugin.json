@@ -1,0 +1,27 @@
+{
+  "name": "shopify-section-generator",
+  "displayName": "Shopify Section Generator",
+  "version": "1.0.0",
+  "description": "Generates individual Shopify sections from Figma designs with Liquid, CSS, and JavaScript.",
+  "author": {
+    "name": "DK Toolkit",
+    "organization": "DevX Labs",
+    "website": "https://www.devxlabs.ai/"
+  },
+  "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
+  "license": "MIT",
+  "category": "shopify-development",
+  "tags": ["shopify", "figma", "sections", "liquid", "css", "javascript"],
+  "triggers": ["generate shopify section", "create section from figma", "build shopify section"],
+  "userInvocable": false,
+  "tools": ["Read", "Write", "Glob", "Grep", "AskUserQuestion"],
+  "dependencies": {
+    "python": [],
+    "mcp": ["@anthropic-ai/mcp-figma-desktop", "@anthropic-ai/mcp-shopify"]
+  },
+  "files": {
+    "skill": "SKILL.md",
+    "references": [],
+    "scripts": []
+  }
+}

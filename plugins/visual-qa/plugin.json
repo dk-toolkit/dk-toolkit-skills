@@ -1,0 +1,27 @@
+{
+  "name": "visual-qa",
+  "displayName": "Visual QA",
+  "version": "1.0.0",
+  "description": "Performs visual quality assurance testing across breakpoints to verify responsive design fidelity.",
+  "author": {
+    "name": "DK Toolkit",
+    "organization": "DevX Labs",
+    "website": "https://www.devxlabs.ai/"
+  },
+  "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
+  "license": "MIT",
+  "category": "quality-assurance",
+  "tags": ["shopify", "qa", "visual-testing", "breakpoints", "responsive"],
+  "triggers": ["visual qa", "test breakpoints", "check responsive"],
+  "userInvocable": false,
+  "tools": ["Read", "Write", "Glob", "Grep", "AskUserQuestion"],
+  "dependencies": {
+    "python": [],
+    "mcp": []
+  },
+  "files": {
+    "skill": "SKILL.md",
+    "references": [],
+    "scripts": []
+  }
+}

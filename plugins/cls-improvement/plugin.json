@@ -1,0 +1,27 @@
+{
+  "name": "cls-improvement",
+  "displayName": "CLS Improvement",
+  "version": "1.0.0",
+  "description": "Diagnoses and fixes Cumulative Layout Shift issues in Shopify themes to improve Core Web Vitals.",
+  "author": {
+    "name": "DK Toolkit",
+    "organization": "DevX Labs",
+    "website": "https://www.devxlabs.ai/"
+  },
+  "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
+  "license": "MIT",
+  "category": "performance",
+  "tags": ["shopify", "performance", "cls", "cumulative-layout-shift", "core-web-vitals"],
+  "triggers": ["improve cls", "fix layout shift", "cumulative layout shift"],
+  "userInvocable": true,
+  "tools": ["Read", "Write", "Edit", "Bash", "WebFetch", "WebSearch", "Glob", "Grep", "AskUserQuestion"],
+  "dependencies": {
+    "python": [],
+    "mcp": []
+  },
+  "files": {
+    "skill": "SKILL.md",
+    "references": [],
+    "scripts": []
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "shopify-build-page",
+  "displayName": "Shopify Build Page",
+  "version": "1.0.0",
+  "description": "Builds complete Shopify pages from Figma designs, generating Liquid templates with sections and schema.",
+  "author": {
+    "name": "DK Toolkit",
+    "organization": "DevX Labs",
+    "website": "https://www.devxlabs.ai/"
+  },
+  "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
+  "license": "MIT",
+  "category": "shopify-development",
+  "tags": ["shopify", "figma", "theme-development", "liquid", "sections"],
+  "triggers": ["build page from figma", "create shopify page", "build shopify template"],
+  "userInvocable": false,
+  "tools": ["Read", "Write", "Glob", "Grep", "AskUserQuestion"],
+  "dependencies": {
+    "python": [],
+    "mcp": ["@anthropic-ai/mcp-figma-desktop", "@anthropic-ai/mcp-shopify"]
+  },
+  "files": {
+    "skill": "SKILL.md",
+    "references": [],
+    "scripts": []
+  }
+}

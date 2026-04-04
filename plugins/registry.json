@@ -1,0 +1,101 @@
+{
+  "name": "dk-toolkit-skills",
+  "version": "1.0.0",
+  "description": "A comprehensive suite of Claude Code plugins for Shopify theme development, performance optimization, and dynamic content management.",
+  "author": {
+    "name": "DK Toolkit",
+    "organization": "DevX Labs",
+    "website": "https://www.devxlabs.ai/"
+  },
+  "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
+  "license": "MIT",
+  "plugins": [
+    {
+      "id": "dynamic-data-flow",
+      "name": "Dynamic Data Flow",
+      "version": "1.0.0",
+      "category": "shopify-content",
+      "path": "./dynamic-data-flow",
+      "description": "Converts hardcoded Shopify Liquid templates into fully dynamic, metafield-driven pages."
+    },
+    {
+      "id": "shopify-build-page",
+      "name": "Shopify Build Page",
+      "version": "1.0.0",
+      "category": "shopify-development",
+      "path": "./shopify-build-page",
+      "description": "Build complete Shopify theme pages from Figma designs by splitting into sections and wiring into template JSON."
+    },
+    {
+      "id": "shopify-section-generator",
+      "name": "Shopify Section Generator",
+      "version": "1.0.0",
+      "category": "shopify-development",
+      "path": "./shopify-section-generator",
+      "description": "Generate one Shopify theme section (schema + Liquid + CSS + JS) from mobile+desktop Figma nodes."
+    },
+    {
+      "id": "shopify-performance-audit",
+      "name": "Shopify Performance Audit",
+      "version": "1.0.0",
+      "category": "performance",
+      "path": "./shopify-performance-audit",
+      "description": "Generate professional .docx performance audit reports for Shopify websites using PageSpeed Insights."
+    },
+    {
+      "id": "cls-improvement",
+      "name": "CLS Improvement",
+      "version": "1.0.0",
+      "category": "performance",
+      "path": "./cls-improvement",
+      "description": "Detect, analyze, plan, implement, and validate Cumulative Layout Shift improvements."
+    },
+    {
+      "id": "fcp-improvement",
+      "name": "FCP Improvement",
+      "version": "1.0.0",
+      "category": "performance",
+      "path": "./fcp-improvement",
+      "description": "Detect, analyze, plan, implement, and validate First Contentful Paint improvements."
+    },
+    {
+      "id": "lcp-improvement",
+      "name": "LCP Improvement",
+      "version": "1.0.0",
+      "category": "performance",
+      "path": "./lcp-improvement",
+      "description": "Detect, analyze, plan, implement, and validate Largest Contentful Paint improvements."
+    },
+    {
+      "id": "tbt-improvement",
+      "name": "TBT Improvement",
+      "version": "1.0.0",
+      "category": "performance",
+      "path": "./tbt-improvement",
+      "description": "Detect, analyze, plan, implement, and validate Total Blocking Time improvements."
+    },
+    {
+      "id": "visual-qa",
+      "name": "Visual QA",
+      "version": "1.0.0",
+      "category": "quality-assurance",
+      "path": "./visual-qa",
+      "description": "Automated Shopify theme visual QA across 11 breakpoints (320px-2560px)."
+    },
+    {
+      "id": "skill-updater",
+      "name": "Skill Updater",
+      "version": "1.0.0",
+      "category": "utility",
+      "path": "./skill-updater",
+      "description": "Auto-propagates learnings from LEARNINGS.md into skill files for continuous improvement."
+    }
+  ],
+  "categories": {
+    "shopify-content": "Content management and dynamic template tools",
+    "shopify-development": "Theme development and section generation",
+    "performance": "Web performance analysis and optimization",
+    "quality-assurance": "Testing and visual quality assurance",
+    "utility": "Internal utilities and automation"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "fcp-improvement",
+  "displayName": "FCP Improvement",
+  "version": "1.0.0",
+  "description": "Diagnoses and fixes First Contentful Paint issues in Shopify themes to improve Core Web Vitals.",
+  "author": {
+    "name": "DK Toolkit",
+    "organization": "DevX Labs",
+    "website": "https://www.devxlabs.ai/"
+  },
+  "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
+  "license": "MIT",
+  "category": "performance",
+  "tags": ["shopify", "performance", "fcp", "first-contentful-paint", "core-web-vitals"],
+  "triggers": ["improve fcp", "fix first contentful paint", "speed up first paint"],
+  "userInvocable": true,
+  "tools": ["Read", "Write", "Edit", "Bash", "WebFetch", "WebSearch", "Glob", "Grep", "AskUserQuestion"],
+  "dependencies": {
+    "python": [],
+    "mcp": []
+  },
+  "files": {
+    "skill": "SKILL.md",
+    "references": [],
+    "scripts": []
+  }
+}

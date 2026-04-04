@@ -1,0 +1,27 @@
+{
+  "name": "lcp-improvement",
+  "displayName": "LCP Improvement",
+  "version": "1.0.0",
+  "description": "Diagnoses and fixes Largest Contentful Paint issues in Shopify themes to improve Core Web Vitals.",
+  "author": {
+    "name": "DK Toolkit",
+    "organization": "DevX Labs",
+    "website": "https://www.devxlabs.ai/"
+  },
+  "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
+  "license": "MIT",
+  "category": "performance",
+  "tags": ["shopify", "performance", "lcp", "largest-contentful-paint", "core-web-vitals"],
+  "triggers": ["improve lcp", "fix largest contentful paint", "speed up lcp"],
+  "userInvocable": true,
+  "tools": ["Read", "Write", "Edit", "Bash", "WebFetch", "WebSearch", "Glob", "Grep", "AskUserQuestion"],
+  "dependencies": {
+    "python": [],
+    "mcp": []
+  },
+  "files": {
+    "skill": "SKILL.md",
+    "references": [],
+    "scripts": []
+  }
+}
