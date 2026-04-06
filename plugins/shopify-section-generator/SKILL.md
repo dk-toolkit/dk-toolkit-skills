@@ -265,7 +265,7 @@ mutation fileCreate($files: [FileCreateInput!]!) {
 }
 ```
 
-- Endpoint: `https://{STORE_URL}/api/2024-10/graphql.json`
+- Endpoint: `https://{STORE_URL}/api/2026-01/graphql.json`
 - Header: `X-Shopify-Storefront-Access-Token: {STOREFRONT_TOKEN}`
 - Upload one asset at a time. Add 300ms delay between uploads to avoid rate limits.
 - On success → store the returned CDN URL in an asset map: `{ "Hero Background Desktop" → "https://cdn.shopify.com/s/files/..." }`
