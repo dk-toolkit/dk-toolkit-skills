@@ -20,6 +20,7 @@ allowed-tools:
 - Write
 - Glob
 - Grep
+- Bash
 - AskUserQuestion
 - mcp__figma-desktop__get_design_context
 - mcp__figma-desktop__get_screenshot
@@ -157,15 +158,197 @@ Input collection flow (mandatory):
 - Map Figma color styles to the nearest Shopify CSS variable or Dawn token.
 - Extract text content from Figma layers to use as schema defaults.
 
-### 3) Derive the Schema Contract
+### 3) Figma Asset Extraction & Shopify Files Upload
+
+When the design source is Figma, extract raster/video assets and upload them to Shopify Files before writing section code. **Skip this entire step if the source is CSS dumps (no Figma context available).**
+
+#### 3.1 — Credential Resolution
+
+Before doing anything, resolve store credentials in this order:
+
+Look for a `.env` file in the project root. Check for these keys:
+
+- `SHOPIFY_STORE_URL` or `SHOPIFY_FLAG_STORE` or `SHOPIFY_STORE` → store `.myshopify.com` URL
+- `SHOPIFY_STOREFRONT_TOKEN` or `SHOPIFY_STOREFRONT_API_TOKEN` → Storefront API token
+
+If both are found → confirm with user once:
+
+```
+Found store credentials in .env:
+Store URL:        your-store.myshopify.com
+Storefront Token: ••••••••[last 4 chars]
+
+Confirm these are correct for this project? [Y/N]
+```
+
+If either is missing → ask the user only for the missing value:
+
+- "What is your store's `.myshopify.com` URL?"
+- "Please provide your Shopify Storefront API token (needs unauthenticated read/write access to files)."
+
+Store both as `STORE_URL` and `STOREFRONT_TOKEN` for use in upload calls below.
+
+#### 3.2 — Identify Exportable Assets
+
+Scan the Figma design context already fetched in Step 2. From all layers in both desktop and mobile frames, identify only:
+
+- **Images** — raster fills, photo layers, product shots, background images, hero images, any layer with an image/bitmap fill
+- **Videos** — video embed layers or any layer named or tagged as video
+
+Exclude entirely:
+
+- Icons, SVGs, vectors, shape layers → these are handled via `snippets/icon-*.liquid`, no upload needed
+- Text layers
+- Pure color/gradient fills with no image content
+
+#### 3.3 — Present Asset List for Confirmation
+
+Before uploading anything, display the full asset list to the user:
+
+```
+FIGMA ASSETS FOUND — Please confirm before upload
+──────────────────────────────────────────────────
+#   Layer Name                  Type    Format   Proposed Shopify Filename
+1   Hero Background Desktop     Image   PNG      {section-name}-hero-bg-desktop.png
+2   Hero Background Mobile      Image   PNG      {section-name}-hero-bg-mobile.png
+3   Product Lifestyle Shot      Image   WEBP     {section-name}-product-lifestyle.webp
+4   Intro Video                 Video   MP4      {section-name}-intro-video.mp4
+
+Total: 4 assets to upload to Shopify Files (/admin/content/files)
+
+Confirm upload? Options:
+  [Y]   Upload all
+  [E]   Edit the list (remove, rename, or change format)
+  [N]   Skip asset upload entirely
+```
+
+Naming convention for all files: `{section-name}-{layer-name-kebab}.{ext}`
+
+Format rules:
+
+- Photos / hero images → WEBP (fallback PNG if export fails)
+- Decorative/UI images → PNG
+- Videos → MP4
+
+Do NOT proceed to upload until the user explicitly confirms with `Y` or approves an edited list.
+
+#### 3.4 — Export from Figma
+
+For each confirmed asset:
+
+1. Use `mcp__figma-desktop__get_design_context` to get the node ID for each layer.
+2. Export via Figma REST API:
+   - Images: `GET https://api.figma.com/v1/images/{file_id}?ids={node_id}&format=png&scale=2` (use `scale=2` for @2x)
+   - Videos: export at original resolution
+3. Download the exported file bytes locally.
+4. If Figma export fails for any asset → warn the user, skip that asset, and continue with the rest.
+
+#### 3.5 — Upload to Shopify Files
+
+Upload each exported asset to Shopify `/admin/content/files` (not theme assets) using the Storefront API:
+
+```graphql
+mutation fileCreate($files: [FileCreateInput!]!) {
+  fileCreate(files: $files) {
+    files {
+      ... on MediaImage {
+        id
+        image { url }
+      }
+      ... on Video {
+        id
+        sources { url }
+      }
+    }
+    userErrors { field message }
+  }
+}
+```
+
+- Endpoint: `https://{STORE_URL}/api/2024-10/graphql.json`
+- Header: `X-Shopify-Storefront-Access-Token: {STOREFRONT_TOKEN}`
+- Upload one asset at a time. Add 300ms delay between uploads to avoid rate limits.
+- On success → store the returned CDN URL in an asset map: `{ "Hero Background Desktop" → "https://cdn.shopify.com/s/files/..." }`
+- On error → show exact error, ask user: `[Retry] [Skip] [Abort]`
+
+#### 3.6 — Asset Map Output
+
+After all uploads complete, print a confirmation table:
+
+```
+ASSETS UPLOADED TO SHOPIFY FILES
+──────────────────────────────────────────────────────────────────
+#   Filename                              Shopify CDN URL
+1   hero-bg-desktop.png                  https://cdn.shopify.com/s/files/...
+2   hero-bg-mobile.png                   https://cdn.shopify.com/s/files/...
+3   product-lifestyle.webp               https://cdn.shopify.com/s/files/...
+4   intro-video.mp4                      https://cdn.shopify.com/s/files/...
+──────────────────────────────────────────────────────────────────
+These URLs will be used as default values in schema settings and Liquid code.
+```
+
+Store this map internally — it will be used in Steps 4 and 5.
+
+#### 3.7 — Usage in Section Code (Steps 4 & 5)
+
+When writing schema and Liquid in Steps 4 and 5, use the uploaded asset CDN URLs as follows:
+
+**In schema settings** — use as default value for `image_picker` or `video` settings:
+
+```json
+{
+  "type": "image_picker",
+  "id": "hero_image",
+  "label": "Hero Image",
+  "info": "Recommended: 1440x800px"
+}
+```
+
+And in the preset, reference the uploaded image:
+
+```json
+"presets": [
+  {
+    "name": "Hero Banner",
+    "settings": {
+      "hero_image": "https://cdn.shopify.com/s/files/..."
+    }
+  }
+]
+```
+
+**In Liquid** — for non-editable background/decorative images, reference directly:
+
+```liquid
+{%- assign fallback_src = 'https://cdn.shopify.com/s/files/...' -%}
+<img
+  src="{{ section.settings.hero_image | image_url: width: 1440 | default: fallback_src }}"
+  loading="lazy"
+  width="1440"
+  height="800"
+  alt="{{ section.settings.hero_image_alt | escape }}">
+```
+
+**For videos:**
+
+```liquid
+<video autoplay muted loop playsinline>
+  <source src="{{ section.settings.video_url | default: 'https://cdn.shopify.com/s/files/...' }}" type="video/mp4">
+</video>
+```
+
+Icons remain unaffected — continue using `{%- render 'icon-<name>' -%}` snippets as normal. Do not upload any icon or SVG to Shopify Files.
+
+### 4) Derive the Schema Contract
 
 - Identify every piece of merchant-editable content: headings, subheadings, body copy, images, videos, CTAs, colors, layout toggles.
 - Map them to Shopify schema `type` values: `text`, `richtext`, `image_picker`, `video`, `url`, `color_scheme`, `select`, `checkbox`, `range`, `html`.
 - If items repeat (e.g., cards, testimonials, FAQs), use `blocks` — create a `block` entry with its own `type`, `name`, and `settings`.
 - Keep setting `id` keys lowercase with underscores: `heading_text`, `button_label`, `card_image`.
 - Sketch the schema structure before writing any Liquid.
+- If Step 3 produced an asset map, incorporate those CDN URLs as preset default values for `image_picker` and `video` settings.
 
-### 4) Write the Section File
+### 5) Write the Section File
 
 Path: `sections/<section-name>.liquid`
 
@@ -238,8 +421,9 @@ Rules:
 - Always escape text output: `{{ value | escape }}` for plain text, `{{ value }}` for richtext.
 - Use `{{ section.settings.color_scheme }}` to apply the Dawn color scheme class.
 - Use `{{ block.shopify_attributes }}` on every block wrapper for theme editor highlighting.
+- If Step 3 produced uploaded asset URLs, use them as fallback values in image/video rendering (see Step 3.7 patterns).
 
-### 5) Write the Stylesheet
+### 6) Write the Stylesheet
 
 Path: `assets/<section-name>.css`
 
@@ -292,7 +476,7 @@ Example structure:
 }
 ```
 
-### 6) Write the JavaScript File (only if needed)
+### 7) Write the JavaScript File (only if needed)
 
 Path: `assets/<section-name>.js`
 
@@ -314,7 +498,7 @@ if (!customElements.get('section-name')) {
 - Enqueue in the section Liquid at the top with `{{ '<section-name>.js' | asset_url | script_tag }}` or use `<script src="{{ '<section-name>.js' | asset_url }}" defer></script>`.
 - Skip this file entirely if no JS is required.
 
-### 7) Write Snippet Files (only if needed)
+### 8) Write Snippet Files (only if needed)
 
 Path: `snippets/<snippet-name>.liquid`
 
@@ -322,7 +506,7 @@ Path: `snippets/<snippet-name>.liquid`
 - Include in section with `{%- render '<snippet-name>', variable: value -%}`.
 - Pass all required data explicitly; do not rely on global scope inside snippets.
 
-### 8) Update Locales (if hardcoded strings used)
+### 9) Update Locales (if hardcoded strings used)
 
 File: `locales/en.default.json`
 
@@ -338,7 +522,7 @@ File: `locales/en.default.json`
   ```
 - Reference in Liquid: `{{ 'sections.<section-name>.heading' | t }}`
 
-### 9) Output Summary
+### 10) Output Summary
 
 At the end of generation, print:
 
@@ -350,6 +534,10 @@ assets/<section-name>.css            ← scoped styles
 assets/<section-name>.js             ← (if applicable)
 snippets/<snippet-name>.liquid       ← (if applicable)
 locales/en.default.json              ← translation keys added
+
+ASSETS UPLOADED TO SHOPIFY FILES     ← (if Step 3 was executed)
+─────────────────────────────────────────────────────
+<list of uploaded filenames and CDN URLs>
 
 HOW TO ADD TO A TEMPLATE
 ─────────────────────────────────────────────────────
@@ -369,7 +557,7 @@ HOW TO ADD TO A TEMPLATE
 }
 ```
 
-### 10) QA + Repair (mandatory follow-up)
+### 11) QA + Repair (mandatory follow-up)
 
 - Ask the user to add the section to the target template in the Shopify Theme Customizer and share a preview URL or screenshot.
 - For each failing breakpoint or visual issue:
@@ -378,7 +566,7 @@ HOW TO ADD TO A TEMPLATE
   3. Re-check at all three breakpoints (375px mobile, 768px tablet, 1280px desktop).
 - Confirm pass before proceeding.
 
-### 11) Post-QA Decision (mandatory)
+### 12) Post-QA Decision (mandatory)
 
 - Ask: "Do you want to stop here, or provide Figma MCP URLs to compare the built section against the Figma design?"
 - If user provides Figma URLs:
@@ -387,7 +575,7 @@ HOW TO ADD TO A TEMPLATE
   - Apply fixes and re-confirm.
 - If user chooses to stop, proceed directly to Wrap-up.
 
-### 12) Learnings
+### 13) Learnings
 
 Append to `.claude/skills/_learnings/LEARNINGS.md` only if the exact entry does not already exist. Skip if the same Dedup Key is already present.
 
@@ -404,7 +592,7 @@ Entry format:
 
 Immediately run `/skill-updater` (no user confirmation) so this skill file updates its Auto-Updated Rules section.
 
-### 13) Final Check
+### 14) Final Check
 
 - Ask the user: "Are there any other issues you noticed that I missed?"
 - If yes, log them into `LEARNINGS.md` and fix if possible.
