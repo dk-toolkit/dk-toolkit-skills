@@ -124,12 +124,24 @@ Input collection flow (mandatory):
 - If a video placeholder is needed, use: `https://www.youtube.com/embed/dQw4w9WgXcQ`
 - Add comment `{%- # TEMP: placeholder video – replace with real asset -%}`.
 
-### JavaScript Rules
+### JavaScript Rules — MANDATORY: Follow `js-standards` Skill
 
-- Prefer vanilla JS; no jQuery unless the theme already depends on it.
-- Wrap all JS in an IIFE or use a `customElements.define(...)` Web Component pattern (preferred for OS 2.0).
-- Use `document.addEventListener('DOMContentLoaded', ...)` or deferred `<script defer>` loading.
-- Scope all `querySelector` calls to the section element: `const section = document.getElementById('shopify-section-{{ section.id }}')`.
+**All JavaScript written by this skill MUST comply with the `js-standards` skill.** Before writing any `.js` file, load and apply every rule from the js-standards skill. Key enforced rules:
+
+- **Vanilla JS only** — no frameworks, no jQuery, no build-step libraries.
+- **Modern ES syntax always** — `const`/`let` (never `var`), arrow functions for callbacks, method syntax inside classes, destructuring, template literals, optional chaining, nullish coalescing.
+- **Web Components** for reusable interactive components (preferred for OS 2.0): `customElements.define(...)` with `connectedCallback`/`disconnectedCallback`. `DOMContentLoaded` only for one-off section scripts.
+- **Script loading** — always `defer`: `<script src="{{ 'section-name.js' | asset_url }}" defer></script>`
+- **Data attributes** for Liquid-to-JS data passing — never inline `<script>` blocks for data.
+- **Event delegation** — single listener on stable parent, `event.target.closest()`, never per-element listeners on repeated items.
+- **AJAX Cart** — `fetch` + `async/await` only, `Content-Type: application/json`, check `response.ok`, no `alert()`.
+- **Pub/Sub** — cross-component communication via `document.dispatchEvent(new CustomEvent('theme:<noun>:<verb>'))`, never direct method calls between components.
+- **Accessibility** — `aria-expanded`, `aria-controls`, `keydown` for Enter/Space on non-button elements, focus trap in modals/drawers.
+- **STRICT: NO inline styles** (`element.style.*`) — toggle CSS classes instead.
+- **STRICT: NO DOM creation** via `innerHTML` with template strings — use Liquid-rendered `<template>` cloning if dynamic rendering is needed.
+- **STRICT: NO price formatting in JS** — use Liquid `| money` filters.
+- **STRICT: NO inline `<script>` tags** in Liquid files — all JS in `assets/`.
+- **Naming** — files: `kebab-case.js`, variables/functions: `camelCase`, constants: `UPPER_SNAKE_CASE`, Web Component classes: `PascalCase`, custom element tags: `kebab-case`.
 
 ---
 
@@ -476,17 +488,36 @@ Example structure:
 }
 ```
 
-### 7) Write the JavaScript File (only if needed)
+### 7) Write the JavaScript File (only if needed) — MUST follow `js-standards`
 
 Path: `assets/<section-name>.js`
 
-- Use Web Component pattern for OS 2.0 compatibility:
+**Every `.js` file MUST comply with the `js-standards` skill.** Validate against the full js-standards checklist before finalizing.
+
+- Use Web Component pattern for reusable interactive components (OS 2.0 compatible):
 
 ```js
 class SectionName extends HTMLElement {
   connectedCallback() {
-    const section = this;
-    // initialise interactivity here
+    this.bindEvents();
+  }
+
+  disconnectedCallback() {
+    // Cleanup event listeners
+  }
+
+  bindEvents() {
+    // Event delegation — single listener on stable parent
+    this.addEventListener('click', (event) => {
+      const target = event.target.closest('[data-action]');
+      if (!target) return;
+      this.handleAction(target);
+    });
+  }
+
+  handleAction(target) {
+    const { action } = target.dataset;
+    // handle action
   }
 }
 
@@ -495,7 +526,14 @@ if (!customElements.get('section-name')) {
 }
 ```
 
-- Enqueue in the section Liquid at the top with `{{ '<section-name>.js' | asset_url | script_tag }}` or use `<script src="{{ '<section-name>.js' | asset_url }}" defer></script>`.
+- Use `DOMContentLoaded` only for one-off section scripts that don't need editor re-render support.
+- Enqueue with `<script src="{{ '<section-name>.js' | asset_url }}" defer></script>` — always `defer`.
+- Pass Liquid data via `data-` attributes on the custom element — never inline `<script>` blocks.
+- Cross-component communication: use `document.dispatchEvent(new CustomEvent('theme:<noun>:<verb>'))` — never call methods on other components directly.
+- Accessibility: toggle `aria-expanded`, handle `keydown` for Enter/Space on non-button elements.
+- NO `element.style.*` — toggle CSS classes instead.
+- NO `innerHTML` with template strings — clone Liquid-rendered `<template>` elements if dynamic rendering is needed.
+- NO price formatting in JS — use Liquid `| money` filters.
 - Skip this file entirely if no JS is required.
 
 ### 8) Write Snippet Files (only if needed)

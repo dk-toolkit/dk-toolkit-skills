@@ -67,7 +67,7 @@ allowed-tools:
 - Images: always use `image_url: width: X` with `srcset`, `sizes`, and `loading="lazy"`. Never bare `{{ image }}`.
 - Buttons/CTAs: always render as `<a href="{{ section.settings.button_url }}" class="button button--primary">{{ section.settings.button_label }}</a>`.
 - Icons: use `snippets/icon-<name>.liquid`; never embed raw SVG inside section files.
-- JavaScript: use Web Component pattern (`customElements.define`) for all interactive sections.
+- **JavaScript: MANDATORY — follow `js-standards` skill.** All JS files must comply with every rule in the js-standards skill: vanilla JS only, modern ES syntax, Web Components for reusable components, `DOMContentLoaded` for one-off scripts, `defer` loading, data attributes for Liquid-to-JS, event delegation, `fetch`+`async/await` for AJAX cart, pub/sub via custom events, full accessibility (aria-expanded, keydown, focus trap). Strict rules: NO inline styles via JS, NO DOM creation via innerHTML, NO price formatting in JS, NO inline scripts. Validate every `.js` file against the js-standards checklist before finalizing.
 - Reuse rule: If an existing section in `sections/` is ≥80% similar in layout and schema shape, extend it instead of creating a new one. Document the reuse decision in the plan.
 - Placeholder images: use Shopify's `{{ 'image' | placeholder_svg_tag }}` by default, or canonical Unsplash URLs during dev (with `{%- # TEMP -%}` comment).
 - Placeholder video (TEMP): use `https://www.youtube.com/embed/dQw4w9WgXcQ` with `{%- # TEMP: placeholder video – replace with real asset -%}`.

@@ -35,6 +35,14 @@
       "description": "Generate one Shopify theme section (schema + Liquid + CSS + JS) from mobile+desktop Figma nodes."
     },
     {
+      "id": "js-standards",
+      "name": "JavaScript Standards",
+      "version": "1.0.0",
+      "category": "shopify-development",
+      "path": "./js-standards",
+      "description": "Vanilla JavaScript standards for Shopify themes — modern ES syntax, Web Components, event delegation, AJAX cart, pub/sub, accessibility, and strict rules."
+    },
+    {
       "id": "shopify-performance-audit",
       "name": "Shopify Performance Audit",
       "version": "1.0.0",

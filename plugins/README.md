@@ -1,6 +1,6 @@
 # DK Toolkit Skills - Claude Code Plugin Marketplace
 
-A comprehensive suite of **10 Claude Code plugins** for Shopify theme development, performance optimization, and dynamic content management.
+A comprehensive suite of **11 Claude Code plugins** for Shopify theme development, performance optimization, and dynamic content management.
 
 ## Quick Install
 
@@ -30,6 +30,7 @@ cd dk-toolkit-skills
 |--------|-------------|-----------|
 | [shopify-build-page](./shopify-build-page/) | Build complete Shopify pages from Figma designs | No (auto-triggered) |
 | [shopify-section-generator](./shopify-section-generator/) | Generate individual Shopify sections from Figma | No (auto-triggered) |
+| [js-standards](./js-standards/) | Vanilla JS standards — modern ES, Web Components, event delegation, accessibility | No (auto-triggered) |
 
 ### Performance Optimization
 

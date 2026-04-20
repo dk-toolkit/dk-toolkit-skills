@@ -11,13 +11,14 @@
   "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
   "license": "MIT",
   "category": "shopify-development",
-  "tags": ["shopify", "figma", "theme-development", "liquid", "sections"],
+  "tags": ["shopify", "figma", "theme-development", "liquid", "sections", "javascript", "js-standards"],
   "triggers": ["build page from figma", "create shopify page", "build shopify template"],
   "userInvocable": false,
   "tools": ["Read", "Write", "Glob", "Grep", "AskUserQuestion"],
   "dependencies": {
     "python": [],
-    "mcp": ["@anthropic-ai/mcp-figma-desktop", "@anthropic-ai/mcp-shopify"]
+    "mcp": ["@anthropic-ai/mcp-figma-desktop", "@anthropic-ai/mcp-shopify"],
+    "skills": ["js-standards"]
   },
   "files": {
     "skill": "SKILL.md",

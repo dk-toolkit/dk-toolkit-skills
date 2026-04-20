@@ -1,0 +1,53 @@
+{
+  "name": "js-standards",
+  "displayName": "JavaScript Standards",
+  "version": "1.0.0",
+  "description": "MANDATORY JavaScript standards for Shopify themes. Must be auto-applied whenever writing, editing, or reviewing any JS code. Hard dependency of shopify-section-generator and shopify-build-page. Enforces modern ES syntax, defer loading, Web Components, data attributes, event delegation, AJAX cart fetch patterns, pub/sub communication, accessibility, and strict rules (no inline styles, no DOM creation, no price formatting in JS, no inline scripts).",
+  "author": {
+    "name": "DK Toolkit",
+    "organization": "DevX Labs",
+    "website": "https://www.devxlabs.ai/"
+  },
+  "repository": "https://github.com/dk-toolkit/dk-toolkit-skills",
+  "license": "MIT",
+  "category": "shopify-development",
+  "tags": ["shopify", "javascript", "vanilla-js", "web-components", "accessibility", "coding-standards"],
+  "triggers": [
+    "write javascript",
+    "edit javascript",
+    "add interactivity",
+    "make interactive",
+    "add a toggle",
+    "build a carousel",
+    "build a slider",
+    "add js",
+    "write js",
+    "javascript standards",
+    "js standards",
+    "review javascript",
+    "create web component",
+    "add event listener",
+    "ajax cart",
+    "fetch cart",
+    "add to cart js",
+    "generate section",
+    "build page from figma",
+    "section javascript",
+    "accordion",
+    "tabs",
+    "modal",
+    "drawer"
+  ],
+  "requiredBy": ["shopify-section-generator", "shopify-build-page"],
+  "userInvocable": false,
+  "tools": ["Read", "Write", "Edit", "Glob", "Grep"],
+  "dependencies": {
+    "python": [],
+    "mcp": []
+  },
+  "files": {
+    "skill": "SKILL.md",
+    "references": [],
+    "scripts": []
+  }
+}
