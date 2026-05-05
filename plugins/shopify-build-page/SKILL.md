@@ -67,7 +67,7 @@ allowed-tools:
 - Images: always use `image_url: width: X` with `srcset`, `sizes`, and `loading="lazy"`. Never bare `{{ image }}`.
 - Buttons/CTAs: always render as `<a href="{{ section.settings.button_url }}" class="button button--primary">{{ section.settings.button_label }}</a>`.
 - Icons: use `snippets/icon-<name>.liquid`; never embed raw SVG inside section files.
-- **JavaScript: MANDATORY — follow `js-standards` skill.** All JS files must comply with every rule in the js-standards skill: vanilla JS only, modern ES syntax, Web Components for reusable components, `DOMContentLoaded` for one-off scripts, `defer` loading, data attributes for Liquid-to-JS, event delegation, `fetch`+`async/await` for AJAX cart, pub/sub via custom events, full accessibility (aria-expanded, keydown, focus trap). Strict rules: NO inline styles via JS, NO DOM creation via innerHTML, NO price formatting in JS, NO inline scripts. Validate every `.js` file against the js-standards checklist before finalizing.
+- **JavaScript: MANDATORY — load and apply `/js-standards` skill.** Before writing, editing, or reviewing ANY `.js` file, you MUST load the `js-standards` skill and apply every rule from it. This is a hard dependency — no JS output is valid without it. After writing any JS, validate against the js-standards checklist before finalizing. This applies to: section generation (Step 3), QA fixes (Step 7), and any JS touched during post-QA repair (Step 8).
 - **Section height control:** For any full-width section (hero banners, image banners, video sections, slideshows), include a `section_height` select setting with options: `auto` (default), `small`, `medium`, `large`. Apply the height modifier class on the outer `<section>` tag: `section-<name>--height-{{ section.settings.section_height }}` (only when not `auto`). Define responsive `min-height` values in the section CSS for each size. Do NOT add height control to non-full-width sections (cards, FAQs, text blocks, logo lists).
 - **Responsive asset handling (desktop & mobile):** For any section with a hero/banner/background image or video, provide separate `image_desktop` + `image_mobile` (or `video_desktop` + `video_mobile`) schema fields. Mobile asset is always optional — if empty, fallback to the desktop asset automatically via `| default: desktop_image` in Liquid. Use `<picture>` + `<source media="...">` for responsive image art direction. For videos, use CSS show/hide between desktop and mobile `<div>` wrappers. Never hide/show two separate `<img>` tags with CSS — always use `<picture>`.
 - Reuse rule: If an existing section in `sections/` is ≥80% similar in layout and schema shape, extend it instead of creating a new one. Document the reuse decision in the plan.
@@ -256,7 +256,8 @@ SECTION ORDER (top → bottom)
 - For each failing breakpoint or visual issue:
   1. Identify which section is failing (layout, color, spacing, schema, JS).
   2. Fix the issue directly in the `.liquid` and/or `.css` file.
-  3. Re-check at all three breakpoints: `375px` (mobile), `768px` (tablet), `1280px` (desktop).
+  3. **If fixing or writing any JS:** load and apply the `js-standards` skill first. Validate the fix against the js-standards checklist.
+  4. Re-check at all three breakpoints: `375px` (mobile), `768px` (tablet), `1280px` (desktop).
 - Confirm all sections pass before proceeding.
 
 **Success criteria:**
